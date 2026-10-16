@@ -6,6 +6,7 @@ gemeinsamen manifest.json zusammen.
 - Ist eine Quelle nicht erreichbar oder ungültig, bricht das Skript ab und
   lässt die bestehende manifest.json unverändert – so verschwindet nie ein Plugin.
 - Kommt ein Plugin (gleiche GUID) in mehreren Quellen vor, werden die Versionen vereint.
+- overrides.json überschreibt einzelne Felder (z. B. Logo, Beschreibung) dauerhaft.
 
 Aufruf: python3 scripts/merge_manifests.py
 """
@@ -18,6 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "sources.json"
+OVERRIDES_FILE = ROOT / "overrides.json"
 OUTPUT_FILE = ROOT / "manifest.json"
 REQUIRED_PLUGIN_KEYS = ("guid", "name", "versions")
 REQUIRED_VERSION_KEYS = ("version", "targetAbi", "sourceUrl", "checksum")
@@ -72,6 +74,17 @@ def main():
                 known = {v["version"] for v in merged[guid]["versions"]}
                 merged[guid]["versions"] += [v for v in plugin["versions"] if v["version"] not in known]
         print(f"{url}: {', '.join(p['name'] for p in plugins)}")
+
+    overrides = {}
+    if OVERRIDES_FILE.exists():
+        overrides = {
+            guid.lower(): fields
+            for guid, fields in json.loads(OVERRIDES_FILE.read_text(encoding="utf-8")).items()
+            if not guid.startswith("_")
+        }
+    for guid, fields in overrides.items():
+        if guid in merged:
+            merged[guid].update({key: value for key, value in fields.items() if key != "versions"})
 
     result = sorted(merged.values(), key=lambda p: p["name"].lower())
     for plugin in result:

@@ -29,6 +29,10 @@ Hast du bisher die Repositories der einzelnen Plugins eingetragen, kannst du die
 - Die GitHub Action [`update-manifest.yml`](.github/workflows/update-manifest.yml) liest diese Dateien **alle 15 Minuten** ein (GitHub kann zeitgesteuerte Läufe verzögern) und fügt sie zu `manifest.json` zusammen. Sofort aktualisieren: **Actions → Manifest aktualisieren → Run workflow**.
 - Ist eine Quelle nicht erreichbar oder fehlerhaft, bleibt `manifest.json` unverändert – es verschwindet nie ein Plugin aus dem Katalog.
 
+## Logo und Beschreibung anpassen
+
+In [`overrides.json`](overrides.json) lassen sich einzelne Felder eines Plugins (Schlüssel: GUID) dauerhaft überschreiben, z. B. `imageUrl`, `description` oder `overview`. Die Werte werden bei jedem Zusammenführen angewendet. Logos liegen im Ordner [`images/`](images/).
+
 ## Neues Plugin hinzufügen
 
 Die Adresse der Repository-Datei des Plugins in [`sources.json`](sources.json) ergänzen und committen – die Action läuft dann automatisch.
@@ -38,3 +42,7 @@ Lokal testen:
 ```bash
 python3 scripts/merge_manifests.py
 ```
+
+## Lizenz
+
+[GPL-3.0](LICENSE)

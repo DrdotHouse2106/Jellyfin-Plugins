@@ -12,6 +12,7 @@ Aufruf: python3 scripts/merge_manifests.py
 
 import json
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
@@ -28,7 +29,12 @@ def version_key(entry):
 
 
 def fetch(url):
-    request = urllib.request.Request(url, headers={"User-Agent": "jellyfin-plugins-merger"})
+    # Zeitstempel anhängen: raw.githubusercontent.com hält Dateien sonst bis zu 5 Minuten im Cache.
+    separator = "&" if "?" in url else "?"
+    fresh_url = f"{url}{separator}t={int(time.time())}"
+    request = urllib.request.Request(
+        fresh_url, headers={"User-Agent": "jellyfin-plugins-merger", "Cache-Control": "no-cache"}
+    )
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)
 

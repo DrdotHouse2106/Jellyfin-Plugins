@@ -1,0 +1,63 @@
+[
+  {
+    "guid": "e7f6d1e2-2069-4a41-804f-19632a1e5966",
+    "name": "Jellyfin Remote",
+    "description": "Fernbedienung und Mediathek-Browser für Smartphones. Die App ist nach der Installation unter /remote/ erreichbar und wird im Web-Client verlinkt.",
+    "overview": "Smartphone-Fernbedienung für Jellyfin",
+    "owner": "DrdotHouse2106",
+    "category": "General",
+    "imageUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Remote/main/app/icons/icon-512.png",
+    "versions": [
+      {
+        "version": "1.0.0.0",
+        "changelog": "https://github.com/DrdotHouse2106/Jellyfin-Remote/releases/tag/v1.0.0",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "https://github.com/DrdotHouse2106/Jellyfin-Remote/releases/download/v1.0.0/jellyfin-remote_1.0.0.0.zip",
+        "checksum": "02e8a1b9dedf4330072f56e1f09435b7",
+        "timestamp": "2026-10-16T10:32:39Z"
+      }
+    ]
+  },
+  {
+    "guid": "2d2a8fdf-0593-4258-a83c-31c4b14e0110",
+    "name": "Local Recommendations",
+    "overview": "Privacy-first personalized recommendations based on local watch history",
+    "description": "Generate per-user content recommendations using TF-IDF embeddings and cosine similarity. All processing happens locally with zero tracking or cloud dependencies. Recommendations appear as virtual libraries accessible from all Jellyfin clients.",
+    "owner": "DrdotHouse2106",
+    "category": "General",
+    "versions": [
+      {
+        "version": "12.2.0.0",
+        "changelog": "Empfehlungen als Zeilen auf der Startseite / Recommendations as home screen rows\n- Zeigt „Empfohlene Filme für dich“ und „Empfohlene Serien für dich“ über das Plugin Home Screen Sections (benötigt Home Screen Sections, File Transformation und Plugin Pages)\n- Echte Bibliotheks-Einträge: volle Infos, gemeinsamer Gesehen-Status, keine Duplikate, keine zusätzlichen Bibliotheken\n- Alte Empfehlungs-Bibliotheken werden automatisch entfernt\n- Native TV-Apps zeigen die Zeilen nicht an\n- BENÖTIGT Jellyfin 12.0 oder neuer",
+        "targetAbi": "12.0.0.0",
+        "sourceUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/release/jellyfin-plugin-localrecs-v12.2.0.zip",
+        "checksum": "74bd48cf69bb99bceed32f3159505003",
+        "timestamp": "2026-10-16T18:00:00Z"
+      },
+      {
+        "version": "12.1.1.0",
+        "changelog": "Neue Bibliotheken werden nicht mehr automatisch freigegeben / New libraries are no longer granted automatically\n- Bibliotheken, die nach der Umstellung angelegt werden, gibst du selbst pro Benutzer frei\n- BENÖTIGT Jellyfin 12.0 oder neuer",
+        "targetAbi": "12.0.0.0",
+        "sourceUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/release/jellyfin-plugin-localrecs-v12.1.1.zip",
+        "checksum": "acd95e118dbae0978351a71dd3a287d0",
+        "timestamp": "2026-10-16T14:00:00Z"
+      },
+      {
+        "version": "12.1.0.0",
+        "changelog": "Automatische Einrichtung / Automatic setup\n- Legt für jeden Benutzer die Empfehlungs-Bibliotheken (Filme und Serien) automatisch an\n- Setzt die Zugriffsrechte, sodass jeder Benutzer nur seine eigenen Empfehlungen sieht\n- Entfernt die Bibliotheken gelöschter Benutzer\n- Neuer deutscher Setup-Reiter mit Status-Tabelle und Schaltern\n- BENÖTIGT Jellyfin 12.0 oder neuer",
+        "targetAbi": "12.0.0.0",
+        "sourceUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/release/jellyfin-plugin-localrecs-v12.1.0.zip",
+        "checksum": "408bce1298b6a26484ad560a8493dd75",
+        "timestamp": "2026-10-16T12:00:00Z"
+      },
+      {
+        "version": "12.0.0.0",
+        "changelog": "Jellyfin-12-Version / Jellyfin 12 release\n- Umstellung auf .NET 10 und Jellyfin-12-Pakete (targetAbi 12.0.0.0)\n- Versionsnummer an Jellyfin 12 angeglichen, damit keine 10.11-Versionen des Originals als Update angeboten werden\n- Getestet auf Jellyfin 12.2\n- BENÖTIGT Jellyfin 12.0 oder neuer (für 10.11.x das Original-Plugin 0.6.1 verwenden)",
+        "targetAbi": "12.0.0.0",
+        "sourceUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/release/jellyfin-plugin-localrecs-v12.0.0.zip",
+        "checksum": "a17e12f380830e521fbfbfcfd77f91be",
+        "timestamp": "2026-10-16T00:00:00Z"
+      }
+    ]
+  }
+]

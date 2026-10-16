@@ -1,0 +1,7 @@
+{
+  "_hinweis": "Repository-Dateien der einzelnen Plugins. Neue Plugins einfach hier ergänzen.",
+  "sources": [
+    "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Remote/main/jellyfin-repository.json",
+    "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/manifest.json"
+  ]
+}

@@ -4,5 +4,8 @@
     "imageUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Plugins/main/images/local-recommendations.png",
     "description": "Erstellt pro Benutzer lokale Empfehlungen für Filme, Serien und Live-TV aus dem eigenen Sehverlauf – ohne Cloud und ohne Tracking. Die Empfehlungen erscheinen als Bereiche auf der Startseite (benötigt Home Screen Sections).",
     "overview": "Lokale, datenschutzfreundliche Empfehlungen für Filme, Serien und Live-TV"
+  },
+  "e7f6d1e2-2069-4a41-804f-19632a1e5966": {
+    "imageUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Plugins/main/images/jellyfin-remote.png"
   }
 }

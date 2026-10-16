@@ -26,7 +26,7 @@ Hast du bisher die Repositories der einzelnen Plugins eingetragen, kannst du die
 ## So funktioniert es
 
 - Jedes Plugin pflegt weiterhin seine eigene Repository-Datei in seinem eigenen GitHub-Repository.
-- Die GitHub Action [`update-manifest.yml`](.github/workflows/update-manifest.yml) liest diese Dateien **stündlich** ein und fügt sie zu `manifest.json` zusammen. Sofort aktualisieren: **Actions → Manifest aktualisieren → Run workflow**.
+- Die GitHub Action [`update-manifest.yml`](.github/workflows/update-manifest.yml) liest diese Dateien **alle 15 Minuten** ein (GitHub kann zeitgesteuerte Läufe verzögern) und fügt sie zu `manifest.json` zusammen. Sofort aktualisieren: **Actions → Manifest aktualisieren → Run workflow**.
 - Ist eine Quelle nicht erreichbar oder fehlerhaft, bleibt `manifest.json` unverändert – es verschwindet nie ein Plugin aus dem Katalog.
 
 ## Neues Plugin hinzufügen

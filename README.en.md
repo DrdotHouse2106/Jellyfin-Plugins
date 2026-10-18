@@ -23,6 +23,12 @@ then install the plugins from the catalog and restart Jellyfin.
 
 Each plugin keeps its own repository file. The GitHub Action `update-manifest.yml` merges them into `manifest.json` every 15 minutes (or on demand via *Run workflow*). If a source is unreachable or invalid, `manifest.json` is left untouched. To add a plugin, append its repository-file URL to `sources.json`. Single fields such as logo or description can be overridden permanently in `overrides.json` (keyed by plugin GUID).
 
+## Support the project
+
+Development costs time and money (servers, test devices, AI tools). If you like the project, a small donation is very welcome:
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-0070ba?logo=paypal&logoColor=white)](https://paypal.me/DrdotHouse)
+
 ## License
 
 [GPL-3.0](LICENSE)

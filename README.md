@@ -43,6 +43,12 @@ Lokal testen:
 python3 scripts/merge_manifests.py
 ```
 
+## Unterstützen
+
+Die Entwicklung kostet Zeit und Geld (Server, Testgeräte, KI-Werkzeuge). Wenn dir das Projekt gefällt, freue ich mich über eine kleine Spende:
+
+[![Spenden via PayPal](https://img.shields.io/badge/Spenden-PayPal-0070ba?logo=paypal&logoColor=white)](https://paypal.me/DrdotHouse)
+
 ## Lizenz
 
 [GPL-3.0](LICENSE)

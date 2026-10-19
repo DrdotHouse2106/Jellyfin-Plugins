@@ -1,5 +1,7 @@
 # Jellyfin-Plugins
 
+[![Buy me a coffee](https://img.shields.io/badge/☕_Buy_me_a_coffee-PayPal-0070ba?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/DrdotHouse)
+
 *[Deutsche Version](README.md)*
 
 Combined plugin repository for all Jellyfin plugins by DrdotHouse2106 – add **one** URL to Jellyfin instead of one per plugin.

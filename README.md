@@ -1,5 +1,7 @@
 # Jellyfin-Plugins
 
+[![Spendier mir einen Kaffee](https://img.shields.io/badge/☕_Spendier_mir_einen_Kaffee-PayPal-0070ba?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/DrdotHouse)
+
 *[English version](README.en.md)*
 
 Gemeinsames Plugin-Repository für alle Jellyfin-Plugins von DrdotHouse2106. Statt jedes Plugin-Repository einzeln einzutragen, genügt in Jellyfin **eine** Adresse.

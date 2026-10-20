@@ -9,7 +9,7 @@ Combined plugin repository for all Jellyfin plugins by DrdotHouse2106 – add **
 ## Plugins
 
 - **Jellyfin Remote** – smartphone remote control and library browser at `/remote/` ([source](https://github.com/DrdotHouse2106/Jellyfin-Remote))
-- **Local Recommendations** – personal recommendations based on local watch history ([source](https://github.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin))
+- **Quallenkinoplugin für Jellyfin** (formerly Local Recommendations) – personal recommendations, live TV with own guide provider, reminders, profiles and a Quallenkino-style UI ([source](https://github.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin))
 
 ## Installation
 

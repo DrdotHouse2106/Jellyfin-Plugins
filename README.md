@@ -11,7 +11,7 @@ Gemeinsames Plugin-Repository für alle Jellyfin-Plugins von DrdotHouse2106. Sta
 | Plugin | Beschreibung | Quelle |
 | --- | --- | --- |
 | **Jellyfin Remote** | Fernbedienung und Mediathek-Browser für Smartphones unter `/remote/` | [Jellyfin-Remote](https://github.com/DrdotHouse2106/Jellyfin-Remote) |
-| **Local Recommendations** | Persönliche Empfehlungen auf Basis des lokalen Wiedergabeverlaufs | [Lokal-Vorschlag-Jellyfin](https://github.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin) |
+| **Quallenkinoplugin für Jellyfin** (früher Local Recommendations) | Persönliche Empfehlungen, Live-TV mit eigenem EPG-Anbieter, Erinnerungen, Profile und Oberfläche im Quallenkino-Stil | [Lokal-Vorschlag-Jellyfin](https://github.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin) |
 
 ## Installation
 

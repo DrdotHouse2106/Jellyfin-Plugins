@@ -23,6 +23,11 @@ OVERRIDES_FILE = ROOT / "overrides.json"
 OUTPUT_FILE = ROOT / "manifest.json"
 REQUIRED_PLUGIN_KEYS = ("guid", "name", "versions")
 REQUIRED_VERSION_KEYS = ("version", "targetAbi", "sourceUrl", "checksum")
+# Nur Pakete aus den eigenen Repositories in den Katalog übernehmen
+ALLOWED_SOURCE_PREFIXES = (
+    "https://github.com/DrdotHouse2106/",
+    "https://raw.githubusercontent.com/DrdotHouse2106/",
+)
 
 
 def version_key(entry):
@@ -52,6 +57,8 @@ def validate(plugins, url):
             missing = [key for key in REQUIRED_VERSION_KEYS if key not in version]
             if missing:
                 raise ValueError(f"{url}: {plugin['name']} {version.get('version')} ohne {', '.join(missing)}")
+            if not str(version["sourceUrl"]).startswith(ALLOWED_SOURCE_PREFIXES):
+                raise ValueError(f"{url}: {plugin['name']} {version['version']}: sourceUrl außerhalb von DrdotHouse2106 ({version['sourceUrl']})")
 
 
 def main():

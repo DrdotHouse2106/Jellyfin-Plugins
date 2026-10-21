@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Plugins/main/images/jellyfin-remote.png",
     "versions": [
       {
+        "version": "1.3.5.0",
+        "changelog": "- Schnellerer Start: Versionierte App-Dateien kommen direkt aus dem Offline-Speicher, ohne jedes Mal beim Server nachzufragen; nur index.html, service-worker.js und manifest.json werden online immer neu geprüft\n- Sicherheit: Die ohne Anmeldung abrufbare Plugin-Info (`/JellyfinRemote/Info`) enthält die öffentliche Server-Adresse nicht mehr\n- Sicherheit: Release-Workflow baut genau den gepushten Tag, prüft die Versionsangabe (kein eingeschleuster Shell-Code) und nutzt GitHub Actions in fest angegebenen Versionen",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "https://github.com/DrdotHouse2106/Jellyfin-Remote/releases/download/v1.3.5/jellyfin-remote_1.3.5.0.zip",
+        "checksum": "9f1897bcdc8046a409fa5cb9891f2aca",
+        "timestamp": "2026-10-21T09:26:04Z"
+      },
+      {
         "version": "1.3.4.0",
         "changelog": "- Sicherheit: Bei der automatischen Anmeldung aus Jellyfin heraus wird ein altes Token (anderer Benutzer oder Server) jetzt zuerst am Server abgemeldet – es bleiben keine gültigen Tokens zurück, die Geräteliste wächst nicht\n- Sicherheit: Links mit `?server=…` übernimmt die Web-App nur, wenn sie auf den eigenen Server zeigen; die iPhone-App fragt vorher nach (Schutz vor untergeschobenen Server-Adressen)\n- Sicherheit: Server-Adressen ohne Schema werden als HTTPS statt HTTP angenommen\n- Weniger Last: Die laufende Aktualisierung fragt nur noch das Zielgerät ab statt alle 2 Sekunden die komplette Sitzungsliste",
         "targetAbi": "12.2.0.0",
@@ -123,6 +131,14 @@
     "category": "General",
     "imageUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Plugins/main/images/quallenkino.png",
     "versions": [
+      {
+        "version": "12.39.0.0",
+        "changelog": "Sicherheit und Tempo\n- „Wer schaut?“: Administratoren werden nie gemerkt, entfernte Profile werden auf dem Server abgemeldet, Warnhinweis in den Einstellungen\n- Kalender-Links werten X-Forwarded-Header nicht mehr selbst aus\n- Identitätsnachweis verrät nicht mehr, ob ein Gerät bekannt ist\n- Top 10 blockiert keine Anfragen mehr, Welten-Zwischenspeicher begrenzt, Trakt-Anmeldung abbrechbar\n- Empfehlungen: Benutzerdaten gesammelt statt pro Titel geladen\n- BENÖTIGT Jellyfin 12.0 oder neuer",
+        "targetAbi": "12.0.0.0",
+        "sourceUrl": "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/release/jellyfin-plugin-localrecs-v12.39.0.zip",
+        "checksum": "cde4b9321007dbd90f729eca2d30c1ec",
+        "timestamp": "2026-10-21T13:00:00Z"
+      },
       {
         "version": "12.38.0.0",
         "changelog": "Metadaten-Check und Live-TV-Dashboard\n- Neuer Reiter „Metadaten“: zeigt je Bibliothek die Lücken (Genres, TMDB/IMDb-ID, Stichwörter, Besetzung …), listet Titel mit wenig oder zu wenig Metadaten und ruft sie gezielt neu ab\n- Dashboard → Live-TV: „LocalRecs EPG“ statt „Unknown“, der Eintrag öffnet die Fernsehprogramm-Einstellungen statt „Seite nicht gefunden“\n- „Reisen“ zählt zu „Nie Film“\n- BENÖTIGT Jellyfin 12.0 oder neuer",

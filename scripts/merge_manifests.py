@@ -3,14 +3,18 @@ Führt die Repository-Dateien (manifest.json) mehrerer Jellyfin-Plugins zu einer
 gemeinsamen manifest.json zusammen.
 
 - Quellen stehen in sources.json.
-- Ist eine Quelle nicht erreichbar oder ungültig, bricht das Skript ab und
-  lässt die bestehende manifest.json unverändert – so verschwindet nie ein Plugin.
+- Ist eine Quelle nicht erreichbar oder ungültig, behalten ihre Plugins den Stand der
+  bestehenden manifest.json – so verschwindet nie ein Plugin, und die übrigen Quellen
+  werden trotzdem aktualisiert. Der Fehler erscheint als Warnung im Actions-Lauf.
+- Neue Versionen (noch nicht mit gleicher Prüfsumme im Katalog) werden heruntergeladen
+  und ihre MD5-Prüfsumme kontrolliert; stimmt sie nicht, gilt die Quelle als fehlerhaft.
 - Kommt ein Plugin (gleiche GUID) in mehreren Quellen vor, werden die Versionen vereint.
 - overrides.json überschreibt einzelne Felder (z. B. Logo, Beschreibung) dauerhaft.
 
 Aufruf: python3 scripts/merge_manifests.py
 """
 
+import hashlib
 import json
 import sys
 import time
@@ -35,15 +39,33 @@ def version_key(entry):
     return tuple(int(part) if part.isdigit() else 0 for part in entry["version"].split("."))
 
 
-def fetch(url):
+def download(url):
     # Zeitstempel anhängen: raw.githubusercontent.com hält Dateien sonst bis zu 5 Minuten im Cache.
     separator = "&" if "?" in url else "?"
     fresh_url = f"{url}{separator}t={int(time.time())}"
     request = urllib.request.Request(
         fresh_url, headers={"User-Agent": "jellyfin-plugins-merger", "Cache-Control": "no-cache"}
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.load(response)
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()
+
+
+def fetch(url):
+    return json.loads(download(url))
+
+
+def check_new_packages(plugins, known, url):
+    """Prüft die MD5 aller Versionen, die noch nicht mit derselben Prüfsumme im Katalog stehen."""
+    for plugin in plugins:
+        for version in plugin["versions"]:
+            checksum = str(version["checksum"]).lower()
+            if (plugin["guid"].lower(), version["version"], checksum) in known:
+                continue
+            actual = hashlib.md5(download(version["sourceUrl"])).hexdigest()
+            if actual != checksum:
+                raise ValueError(
+                    f"{url}: {plugin['name']} {version['version']}: MD5 {actual} statt {checksum}"
+                )
 
 
 def validate(plugins, url):
@@ -63,15 +85,25 @@ def validate(plugins, url):
 
 def main():
     sources = json.loads(SOURCES_FILE.read_text(encoding="utf-8"))["sources"]
+    previous = json.loads(OUTPUT_FILE.read_text(encoding="utf-8")) if OUTPUT_FILE.exists() else []
+    known = {
+        (plugin["guid"].lower(), version["version"], str(version["checksum"]).lower())
+        for plugin in previous
+        for version in plugin.get("versions", [])
+    }
     merged = {}
+    failed = False
 
     for url in sources:
         try:
             plugins = fetch(url)
             validate(plugins, url)
-        except Exception as error:  # noqa: BLE001 – jede Störung soll den Lauf abbrechen
-            print(f"FEHLER bei {url}: {error}", file=sys.stderr)
-            return 1
+            check_new_packages(plugins, known, url)
+        except Exception as error:  # noqa: BLE001 – jede Störung zählt als fehlerhafte Quelle
+            # GitHub zeigt ::warning:: als Hinweis am Lauf an
+            print(f"::warning::Quelle übersprungen, bisheriger Stand bleibt: {url}: {error}", file=sys.stderr)
+            failed = True
+            continue
 
         for plugin in plugins:
             guid = plugin["guid"].lower()
@@ -81,6 +113,13 @@ def main():
                 known = {v["version"] for v in merged[guid]["versions"]}
                 merged[guid]["versions"] += [v for v in plugin["versions"] if v["version"] not in known]
         print(f"{url}: {', '.join(p['name'] for p in plugins)}")
+
+    if failed:
+        # Plugins der übersprungenen Quellen mit ihrem bisherigen Stand behalten
+        for plugin in previous:
+            guid = plugin["guid"].lower()
+            if guid not in merged:
+                merged[guid] = plugin
 
     overrides = {}
     if OVERRIDES_FILE.exists():

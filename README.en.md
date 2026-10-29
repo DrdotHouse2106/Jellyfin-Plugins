@@ -23,7 +23,7 @@ then install the plugins from the catalog and restart Jellyfin.
 
 ## How it works
 
-Each plugin keeps its own repository file. The GitHub Action `update-manifest.yml` merges them into `manifest.json` every 15 minutes (or on demand via *Run workflow*). If a source is unreachable or invalid, `manifest.json` is left untouched. To add a plugin, append its repository-file URL to `sources.json`. Single fields such as logo or description can be overridden permanently in `overrides.json` (keyed by plugin GUID).
+Each plugin keeps its own repository file. The GitHub Action `update-manifest.yml` merges them into `manifest.json` every 15 minutes (or on demand via *Run workflow*). If a source is unreachable or invalid, its plugins keep their previous state (nothing disappears) while the other sources are still updated; the run shows a warning. New versions are downloaded and their MD5 checksum is verified before they are added. To add a plugin, append its repository-file URL to `sources.json`. Single fields such as logo or description can be overridden permanently in `overrides.json` (keyed by plugin GUID).
 
 ## Support the project
 

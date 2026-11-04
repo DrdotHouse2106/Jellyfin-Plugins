@@ -43,7 +43,12 @@ def version_key(entry):
     return tuple(int(part) if part.isdigit() else 0 for part in entry["version"].split("."))
 
 
-def download(url):
+MAX_MANIFEST_BYTES = 5 * 1024 * 1024
+MAX_PACKAGE_BYTES = 100 * 1024 * 1024
+
+
+def download(url, limit=MAX_PACKAGE_BYTES):
+    """Lädt eine Datei, höchstens „limit“ Bytes – größere Antworten brechen ab (kein Speicher- bzw. Platten-Überlauf)."""
     # Zeitstempel anhängen: raw.githubusercontent.com hält Dateien sonst bis zu 5 Minuten im Cache.
     separator = "&" if "?" in url else "?"
     fresh_url = f"{url}{separator}t={int(time.time())}"
@@ -51,11 +56,17 @@ def download(url):
         fresh_url, headers={"User-Agent": "jellyfin-plugins-merger", "Cache-Control": "no-cache"}
     )
     with urllib.request.urlopen(request, timeout=60) as response:
-        return response.read()
+        length = response.headers.get("Content-Length")
+        if length and length.isdigit() and int(length) > limit:
+            raise ValueError(f"{url}: größer als {limit // (1024 * 1024)} MB")
+        data = response.read(limit + 1)
+        if len(data) > limit:
+            raise ValueError(f"{url}: größer als {limit // (1024 * 1024)} MB")
+        return data
 
 
 def fetch(url):
-    return json.loads(download(url))
+    return json.loads(download(url, MAX_MANIFEST_BYTES))
 
 
 def check_new_packages(plugins, known, url):

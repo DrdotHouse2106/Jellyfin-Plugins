@@ -38,7 +38,7 @@ In [`overrides.json`](overrides.json) lassen sich einzelne Felder eines Plugins 
 
 ## Neues Plugin hinzufügen
 
-Die Adresse der Repository-Datei des Plugins in [`sources.json`](sources.json) ergänzen und committen – die Action läuft dann automatisch.
+In [`sources.json`](sources.json) einen Eintrag `{ "url": "<Adresse der Repository-Datei>", "guids": ["<GUID des Plugins>"] }` ergänzen und committen – die Action läuft dann automatisch. Eine GUID gehört genau einer Quelle: Liefert eine Quelle eine fremde GUID, wird sie übersprungen (so kann ein anderes Repository keine Versionen für ein fremdes Plugin unterschieben). Pakete (`sourceUrl`) müssen aus dem Repository der Quelle selbst kommen.
 
 Lokal testen:
 

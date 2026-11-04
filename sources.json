@@ -1,7 +1,13 @@
 {
-  "_hinweis": "Repository-Dateien der einzelnen Plugins. Neue Plugins einfach hier ergänzen.",
+  "_hinweis": "Repository-Dateien der einzelnen Plugins. Jede Quelle nennt die GUIDs, die sie liefern darf (eine GUID gehört genau einer Quelle). Neue Plugins hier ergänzen.",
   "sources": [
-    "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Remote/main/jellyfin-repository.json",
-    "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/manifest.json"
+    {
+      "url": "https://raw.githubusercontent.com/DrdotHouse2106/Jellyfin-Remote/main/jellyfin-repository.json",
+      "guids": ["e7f6d1e2-2069-4a41-804f-19632a1e5966"]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/DrdotHouse2106/Lokal-Vorschlag-Jellyfin/main/manifest.json",
+      "guids": ["2d2a8fdf-0593-4258-a83c-31c4b14e0110"]
+    }
   ]
 }

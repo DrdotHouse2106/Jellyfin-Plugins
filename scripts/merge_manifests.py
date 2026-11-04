@@ -8,6 +8,10 @@ gemeinsamen manifest.json zusammen.
   werden trotzdem aktualisiert. Der Fehler erscheint als Warnung im Actions-Lauf.
 - Neue Versionen (noch nicht mit gleicher Prüfsumme im Katalog) werden heruntergeladen
   und ihre MD5-Prüfsumme kontrolliert; stimmt sie nicht, gilt die Quelle als fehlerhaft.
+- Jede Quelle nennt in sources.json die GUIDs, die sie liefern darf ("guids"); eine GUID
+  gehört genau einer Quelle. Fremde GUIDs werden abgelehnt – so kann ein anderes Repository
+  keine Versionen für ein fremdes Plugin unterschieben.
+- Pakete (sourceUrl) müssen aus dem Repository der Quelle selbst kommen.
 - Kommt ein Plugin (gleiche GUID) in mehreren Quellen vor, werden die Versionen vereint.
 - overrides.json überschreibt einzelne Felder (z. B. Logo, Beschreibung) dauerhaft.
 
@@ -68,7 +72,34 @@ def check_new_packages(plugins, known, url):
                 )
 
 
-def validate(plugins, url):
+def repo_prefixes(url):
+    """Erlaubte Paket-Adressen einer Quelle: github.com bzw. raw.githubusercontent.com desselben Repositorys."""
+    parts = url.split("/")
+    if len(parts) < 5 or parts[2] not in ("raw.githubusercontent.com", "github.com"):
+        raise ValueError(f"{url}: Quelle muss auf GitHub liegen")
+    owner, repo = parts[3].lower(), parts[4].lower()
+    return (f"https://github.com/{owner}/{repo}/", f"https://raw.githubusercontent.com/{owner}/{repo}/")
+
+
+def load_sources():
+    """sources.json lesen: Einträge {"url", "guids"}; jede GUID darf nur einer Quelle gehören."""
+    entries = json.loads(SOURCES_FILE.read_text(encoding="utf-8"))["sources"]
+    sources, owner = [], {}
+    for entry in entries:
+        if isinstance(entry, str):
+            raise ValueError(f"{entry}: bitte als {{\"url\", \"guids\"}} eintragen")
+        guids = {g.lower() for g in entry.get("guids", [])}
+        if not guids:
+            raise ValueError(f"{entry['url']}: keine GUIDs angegeben")
+        for guid in guids:
+            if guid in owner:
+                raise ValueError(f"GUID {guid} ist {owner[guid]} und {entry['url']} zugeordnet")
+            owner[guid] = entry["url"]
+        sources.append((entry["url"], guids))
+    return sources
+
+
+def validate(plugins, url, guids=None):
     if not isinstance(plugins, list):
         raise ValueError(f"{url}: erwartet wird eine Liste von Plugins")
     for plugin in plugins:
@@ -81,10 +112,14 @@ def validate(plugins, url):
                 raise ValueError(f"{url}: {plugin['name']} {version.get('version')} ohne {', '.join(missing)}")
             if not str(version["sourceUrl"]).startswith(ALLOWED_SOURCE_PREFIXES):
                 raise ValueError(f"{url}: {plugin['name']} {version['version']}: sourceUrl außerhalb von DrdotHouse2106 ({version['sourceUrl']})")
+            if not str(version["sourceUrl"]).lower().startswith(repo_prefixes(url)):
+                raise ValueError(f"{url}: {plugin['name']} {version['version']}: Paket nicht aus dem Repository der Quelle ({version['sourceUrl']})")
+        if guids is not None and plugin["guid"].lower() not in guids:
+            raise ValueError(f"{url}: {plugin['name']} ({plugin['guid']}) gehört laut sources.json nicht zu dieser Quelle")
 
 
 def main():
-    sources = json.loads(SOURCES_FILE.read_text(encoding="utf-8"))["sources"]
+    sources = load_sources()
     previous = json.loads(OUTPUT_FILE.read_text(encoding="utf-8")) if OUTPUT_FILE.exists() else []
     known = {
         (plugin["guid"].lower(), version["version"], str(version["checksum"]).lower())
@@ -94,10 +129,10 @@ def main():
     merged = {}
     failed = False
 
-    for url in sources:
+    for url, guids in sources:
         try:
             plugins = fetch(url)
-            validate(plugins, url)
+            validate(plugins, url, guids)
             check_new_packages(plugins, known, url)
         except Exception as error:  # noqa: BLE001 – jede Störung zählt als fehlerhafte Quelle
             # GitHub zeigt ::warning:: als Hinweis am Lauf an
@@ -110,8 +145,9 @@ def main():
             if guid not in merged:
                 merged[guid] = {**plugin, "versions": list(plugin["versions"])}
             else:
-                known = {v["version"] for v in merged[guid]["versions"]}
-                merged[guid]["versions"] += [v for v in plugin["versions"] if v["version"] not in known]
+                # Gleiche GUID zweimal in derselben Quelle: Versionen vereinen (nicht „known“ überschreiben)
+                seen = {v["version"] for v in merged[guid]["versions"]}
+                merged[guid]["versions"] += [v for v in plugin["versions"] if v["version"] not in seen]
         print(f"{url}: {', '.join(p['name'] for p in plugins)}")
 
     if failed:
